@@ -1,0 +1,13 @@
+digraph tree {
+    "0x7f4641ddb4c0" [label="Оружие"];
+    "0x7f4641ddb220" [label="Ближний Бой"];
+    "0x7f4641dafd90" [label="Одноручное оружие"];
+    "0x7f4641dafc70" [label="Кинжалы"];
+    "0x7f45d83c35e0" [label="Нож бандита"];
+    "0x7f45d83b92e0" [label="Кинжал"];
+    "0x7f4641ddb4c0" -> "0x7f4641ddb220";
+    "0x7f4641ddb220" -> "0x7f4641dafd90";
+    "0x7f4641dafd90" -> "0x7f4641dafc70";
+    "0x7f4641dafc70" -> "0x7f45d83c35e0";
+    "0x7f4641dafc70" -> "0x7f45d83b92e0";
+}
