@@ -5,7 +5,8 @@ from os import remove
 import pandas as pd
 from anytree import Node, RenderTree, PreOrderIter
 from anytree.exporter import UniqueDotExporter
-
+import dictionary
+import random
 
 class weapon:
     name = ""
@@ -100,6 +101,51 @@ def init_tree(self):
     tmp = Node('Клинок Хаоса', parent=Katanas,fil = 0,
                 inf=weapon('Клинок Хаоса', False, 6.0, 120, 144, 100, '-', 'C', '-', '-'))
     self.append(tmp)
+    tmp = Node('Нож бандита', parent=Dagger,fil = 0,
+                inf=weapon('Нож бандита', False, 1.0, 200, 56, 147, 'E', 'B', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Кинжал', parent=Dagger,fil = 0,
+                inf=weapon('Кинжал', True, 0.5, 200, 56, 131, 'E', 'B', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Парирующий кинжал', parent=Dagger,fil = 0,
+                inf=weapon('Парирующий кинжал', True, 0.5, 200, 54, 131, 'E', 'B', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Призрачный клинок', parent=Dagger,fil = 0,
+                inf=weapon('Призрачный клинок', False, 0.5, 100, 110, 127, 'E', '-', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Кинжал Присциллы', parent=Dagger,fil = 0,
+                inf=weapon('Кинжал Присциллы', False, 1.0, 100, 80, 100, '-', 'A', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Тёмный Серебряный След', parent=Dagger,fil = 0,
+                inf=weapon('Тёмный Серебряный След', False, 1.0, 120, 75, 160, 'E', 'S', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Большой меч', parent=Huge_swords,fil = 0,
+                inf=weapon('Большой меч', True, 12.0, 200, 130, 100, 'C', 'D', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Двуручный меч', parent=Huge_swords,fil = 0,
+                inf=weapon('Двуручный меч', True, 10.0, 200, 130, 100, 'C', 'D', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Демоническое мачете', parent=Huge_swords,fil = 0,
+                inf=weapon('Демоническое мачете', True, 18.0, 600, 133, 100, 'B', '-', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Большой меч Черного Рыцаря', parent=Huge_swords,fil = 0,
+                inf=weapon('Большой меч Черного Рыцаря', False, 14.0, 300, 220, 100, 'B', 'E', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Большой меч дракона', parent=Huge_swords,fil = 0,
+                inf=weapon('Большой меч дракона', False, 24.0, 400, 390, 100, '-', '-', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Легкий арбалет', parent=Crossbows,fil = 0,
+                inf=weapon('Легкий арбалет', False, 3.0, 150, 50, 100, '-', '-', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Тяжелый арбалет', parent=Crossbows,fil = 0,
+                inf=weapon('Тяжелый арбалет', False, 5.0, 150, 55, 100, '-', '-', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Меткий арбалет', parent=Crossbows,fil = 0,
+                inf=weapon('Меткий арбалет', False, 8.0, 150, 52, 100, '-', '-', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Авелин', parent=Crossbows,fil = 0,
+                inf=weapon('Авелин', False, 6.0, 150, 37, 100, '-', '-', '-', '-'))
+    self.append(tmp)
     return (root)
 
 def find_Weapon(self, name):
@@ -191,12 +237,14 @@ def lab2(root, leaves):
     weapon1 = input()
     weapon1 = find_Weapon(leaves, weapon1)
     if weapon1 == None:
-        print("прости, избранная нежить, но я не знаю такого оружия")
+        er = dictionary.error_find[random.choice(range(3))]
+        print(er)
         return
     weapon2 = input()
     weapon2 = find_Weapon(leaves,weapon2)
     if weapon2 == None:
-        print("прости, избранная нежить, но я не знаю такого оружия")
+        er = dictionary.error_find[random.choice(range(3))]
+        print(er)
         return
     preparation_data(weapon1.inf)
     preparation_data(weapon2.inf)
@@ -206,6 +254,7 @@ def lab2(root, leaves):
     print('Корреляция: {}'.format(corelation(weapon1.inf, weapon2.inf)))
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #лабораторная работа 3
+#коллаборативная фильтрация на основе опыта других игроков(таблица)
 def lab3(root, leaves):
     df = pd.read_excel('Book1.xlsx', engine= 'openpyxl')
     df = df.astype(str)
@@ -219,7 +268,8 @@ def lab3(root, leaves):
         if row == name_weap:
             find = row
     if find == '':
-        print("прости, избранная нежить, но я не знаю такого оружия")
+        er = dictionary.error_find[random.choice(range(3))]
+        print(er)
         return
     zero_fil(leaves)
     for item in df:
@@ -242,7 +292,44 @@ def lab3(root, leaves):
     zero_fil(leaves)
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #лабораторная работа 4
-
+#Контентно-ориентированная фильтрация на основе разделения объектов по группам
+def lab4(root, leaves):
+    df = pd.read_excel('Book2.xlsx', engine= 'openpyxl')
+    df = df.astype(str)
+    df = df.set_index('Оружие').T
+    df.to_excel('DataSet.xlsx', engine='openpyxl')
+    df = pd.read_excel('DataSet.xlsx', index_col=0, engine='openpyxl')
+    print("Скажи же, какое оружие ты используешь")
+    name_weap = input()
+    find = ''
+    for row in df:
+        if row == name_weap:
+            find = row
+    if find == '':
+        er = dictionary.error_find[random.choice(range(3))]
+        print(er)
+        return
+    zero_fil(leaves)
+    weapon2 = find_Weapon(leaves, find)
+    for item in df:
+        if not(item == find):
+            i = 0
+            weapon1 = find_Weapon(leaves, item)
+            for item1 in df[item]:
+                if (item1 == 1) and (df[find][i] == 1):
+                    weapon1.fil +=1
+                i+=1
+            if weapon1.parent == weapon2.parent:
+                weapon1.fil +=1
+    remove('DataSet.xlsx')
+    weapon2.fil = -1
+    leaves.sort(reverse = True, key = key_func)
+    print("Я думаю, что тебе подойдет это оружие, взгляни:")
+    i = 0
+    while i < 5:
+        print(leaves[i].name)
+        i+=1
+    zero_fil(leaves)
 #--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #лабораторная работа 5
 #тестирование оружий на соответствие параметрам
@@ -278,10 +365,26 @@ def unsearch(List):
 #главная функция
 def lab5(root, leaves):
     print("Ты хочешь оружие ближнего или дальнего боя(0 или 1)?")
-    sloy2 = int(input())
+    sloy2 = input()
+    if sloy2 == 'ближнего' or sloy2 == 'ближнего боя':
+        sloy2 = 0
+    elif sloy2 == 'дальнего' or sloy2 == 'дальнего боя':
+        sloy2 = 1
+    else:
+        pr =dictionary.error_in[random.choice(range(3))]
+        print(pr)
+        return
     root.children[sloy2].fil = 1
-    print("Нужна ли возможность усиления(1-да, 0 - нет)? ")
-    coating = bool(int(input()))
+    print("Нужна ли возможность усиления? ")
+    coating =input()
+    if coating == 'да':
+        coating = True
+    elif coating == 'нет':
+        coating = False
+    else:
+        pr =dictionary.error_in[random.choice(range(3))]
+        print(pr)
+        return
     print("Какой диапазон веса оружия? ")
     min_we = float(input())
     max_we = float(input())
@@ -339,19 +442,26 @@ def start():
     tree = init_tree(leaves)
     print("Приветствую тебя, Избранная Нежить! Я Хранительница Костра. Я могу помочь тебе в твох нелегких странствиях, обращайся, если понадобится помощь.")
     while 1:
-        print("Я могу:\n1.Рассказать тебе об оружии\n2.Сравнить 2 любых оружия\n3.Обратиться к мультивселенскому разуму и предложить тебе оружие на основе опыта других воинов\n4.Предложить тебе оружие похожее на твоё\n5.Подобрать оружие по твоим предпочтениям\n(6.уйти)")
-        com = int(input())
-        if com == 2:
+        pr = dictionary.menu[random.choice(range(3))]
+        print(pr,"\n1.Рассказать тебе об оружии\n2.Сравнить 2 любых оружия\n3.Обратиться к мультивселенскому разуму и предложить тебе оружие на основе опыта других воинов\n4.Предложить тебе оружие похожее на твоё\n5.Подобрать оружие по твоим предпочтениям\n(6.уйти)")
+        com = input()
+        if com in dictionary.chek2:
             print ("Давай взглянем на них")
             lab2(tree, leaves)
-        elif com == 3:
+        elif com in dictionary.chek3:
             lab3(tree, leaves)
-        elif com == 5:
+        elif com in dictionary.chek4:
+            lab4(tree, leaves)
+        elif com in dictionary.chek5:
             print("Расскажи, чего ты желаешь")
             lab5(tree, leaves)
-        elif com ==6:
-            print("Легкой дороги, Избранная Нежить. Если понадобится помощь, то ты знаешь где меня найти")
+        elif com in dictionary.chek6:
+            pr =dictionary.parting[random.choice(range(3))]
+            print(pr)
             break
+        else:
+            pr =dictionary.error_in[random.choice(range(3))]
+            print(pr)
 
 def test():
     leaves = []
