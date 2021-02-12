@@ -146,6 +146,15 @@ def init_tree(self):
     tmp = Node('Авелин', parent=Crossbows,fil = 0,
                 inf=weapon('Авелин', False, 6.0, 150, 37, 100, '-', '-', '-', '-'))
     self.append(tmp)
+    tmp = Node('Асторский прямой меч', parent=Straight_Swords,fil = 0,
+                inf=weapon('Асторский прямой меч', False, 3.0, 160, 80, 100, 'C', 'C', '-', 'C'))
+    self.append(tmp)
+    tmp = Node('Меч дракона', parent=Straight_Swords,fil = 0,
+                inf=weapon('Меч дракона', False, 6.0, 360, 200, 100, '-', '-', '-', '-'))
+    self.append(tmp)
+    tmp = Node('Балдерский меч', parent=Straight_Swords,fil = 0,
+                inf=weapon('Балдерский меч', False, 3.0, 120, 80, 100, 'E', 'B', '-', '-'))
+    self.append(tmp)
     return (root)
 
 def find_Weapon(self, name):
@@ -153,7 +162,7 @@ def find_Weapon(self, name):
         if item.name == name:
             return item
     return None
-#перед исчисляемого строкового параметка в число
+#перевод исчисляемого строкового параметка в число
 def str_to_number(self):
     if self == 'E':
         return 1
@@ -190,8 +199,8 @@ def key_func(item):
 #Лабораторная работа 2
 #манхэттенское расстояние
 def manhetten(weapon1, weapon2):
-    tmp1 = weapon1.coating + weapon1.strength + weapon1.physical_damage + weapon1.critical_damage + weapon1.power + weapon1.agility + weapon1.intellect + weapon1.belief
-    tmp2 = weapon2.coating + weapon2.strength + weapon2.physical_damage + weapon2.critical_damage + weapon2.power + weapon2.agility + weapon2.intellect + weapon2.belief
+    tmp1 = weapon1.coating + weapon1.strength + weapon1.physical_damage + weapon1.critical_damage + weapon1.power + weapon1.agility + weapon1.intellect + weapon1.belief+weapon1.weight
+    tmp2 = weapon2.coating + weapon2.strength + weapon2.physical_damage + weapon2.critical_damage + weapon2.power + weapon2.agility + weapon2.intellect + weapon2.belief+weapon2.weight
     return abs(tmp1 - tmp2)
 #евклидово расстояние
 def euclidian(weapon1, weapon2):
@@ -444,8 +453,14 @@ def start():
     while 1:
         pr = dictionary.menu[random.choice(range(3))]
         print(pr,"\n1.Рассказать тебе об оружии\n2.Сравнить 2 любых оружия\n3.Обратиться к мультивселенскому разуму и предложить тебе оружие на основе опыта других воинов\n4.Предложить тебе оружие похожее на твоё\n5.Подобрать оружие по твоим предпочтениям\n(6.уйти)")
-        com = input()
-        if com in dictionary.chek2:
+        question_words = input().split()
+        normalForm_words = []
+        for word in question_words:
+            normalForm_words.append(dictionary.getNormalForm(word))
+        com = dictionary.getArrayOfTags(normalForm_words)
+        if com in dictionary.chek1:
+            print ("в следующих патчах")
+        elif com in dictionary.chek2:
             print ("Давай взглянем на них")
             lab2(tree, leaves)
         elif com in dictionary.chek3:
@@ -462,11 +477,6 @@ def start():
         else:
             pr =dictionary.error_in[random.choice(range(3))]
             print(pr)
-
-def test():
-    leaves = []
-    tree = init_tree(leaves)
-    lab3(tree, leaves)
 
 if __name__ == '__main__':
     start()
